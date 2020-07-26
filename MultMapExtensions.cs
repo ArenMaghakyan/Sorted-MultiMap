@@ -8,20 +8,10 @@ namespace Sorted_MultiMap
         internal static SortedMultiMap<K,V> Union<K,V>(this SortedMultiMap<K,V> originalMap, SortedMultiMap<K, V> secondMap)
         {
 
-            foreach (KeyValuePair<K, List<V>> item in secondMap)
+            foreach (KeyValuePair<K, V> item in secondMap)
             {
 
-                var hasKey = originalMap.HasKey(item.Key);
-
-                foreach (var values in secondMap.Get(item.Key))
-                {
-                    originalMap.Add(item.Key, values);
-                }
-
-                if (hasKey)
-                {
-                    originalMap.RemoveDuplicateValues(item.Key);
-                }
+                originalMap.Add(item.Key, item.Value);
 
             }
             return originalMap;
@@ -32,14 +22,15 @@ namespace Sorted_MultiMap
         {
             var newMap = new SortedMultiMap<K, V>();
 
-            foreach (KeyValuePair<K, List<V>> item in originalMap)
+            foreach (KeyValuePair<K, V> item in originalMap)
             {
                 if (secondMap.HasKey(item.Key))
                 {
-                    var commonValuesList = item.Value.Intersect(secondMap.Get(item.Key)).ToList();
-                    foreach (var values in commonValuesList)
+                    var isCommonValue = secondMap.Get(item.Key).Contains(item.Value);
+
+                    if (isCommonValue)
                     {
-                        newMap.Add(item.Key, values);
+                        newMap.Add(item.Key, item.Value);
                     }
 
                 } 
@@ -48,13 +39,10 @@ namespace Sorted_MultiMap
 
             originalMap.Clear();
 
-            foreach (KeyValuePair<K, List<V>> item in newMap)
+            foreach (KeyValuePair<K, V> item in newMap)
             {
 
-                foreach (var values in newMap.Get(item.Key))
-                {
-                    originalMap.Add(item.Key, values);
-                }
+                originalMap.Add(item.Key, item.Value);
 
             }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Channels;
 
 namespace Sorted_MultiMap
 {
@@ -18,20 +17,19 @@ namespace Sorted_MultiMap
                 multi.Add("a", 1);
                 multi.Add("x", 2);
                 multi.Add("x", 4);
+                multi.Add("x", 6);
+                multi.Add("x", 7);
 
                 multi2.Add("x", 2);
                 multi2.Add("x", 3);
                 multi2.Add("a", 8);
 
                 multi.Intersect(multi2);
-                //multi.Union(mult2);
+                //multi.Union(multi2);
 
-                foreach (KeyValuePair<string, List<int>> item in multi)
+                foreach (KeyValuePair<string, int> item in multi)
                 {
-                    foreach (var i in multi.Get(item.Key))
-                    {
-                        Console.WriteLine($"{item.Key}-{i}", item.Key, i);
-                    }
+                    Console.WriteLine($"{item.Key}-{item.Value}", item.Key, item.Value);
                 }
 
             }

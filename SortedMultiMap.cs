@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 
 
@@ -14,11 +13,16 @@ namespace Sorted_MultiMap
 
         public IEnumerator GetEnumerator()
         {
+
             foreach (KeyValuePair<K, List<V>> keyValue in this._myDictionary)
             {
                 if (keyValue.Key != null)
                 {
-                    yield return keyValue;
+                    foreach (var v in keyValue.Value)
+                    {
+                        yield return new KeyValuePair<K,V>(keyValue.Key, v);
+                    }
+
                 }
             }
         }
@@ -26,9 +30,8 @@ namespace Sorted_MultiMap
          
         public void Add(K key, V value)
         {
-            var hasKey = this._myDictionary.TryGetValue(key, out var valueList);
 
-            if (hasKey)
+            if (this._myDictionary.TryGetValue(key, out var valueList))
             {
                 valueList.Add(value);
                 valueList.Sort();
@@ -43,9 +46,8 @@ namespace Sorted_MultiMap
    
         public List<V> Get(K key)
         {
-            var hasKey = this._myDictionary.TryGetValue(key, out var valueList);
 
-            if (hasKey)
+            if (this._myDictionary.TryGetValue(key, out var valueList))
             {
                 return valueList;
             }
@@ -55,10 +57,9 @@ namespace Sorted_MultiMap
 
 
         public bool Remove(K key, V value)
-        { 
-            var hasKey = this._myDictionary.TryGetValue(key, out var valueList);
+        {
 
-            if (hasKey)
+            if (this._myDictionary.TryGetValue(key, out var valueList))
             {
                 if (valueList.Remove(value))
                 {
@@ -80,12 +81,12 @@ namespace Sorted_MultiMap
 
         public bool RemoveAll(K key)
         {
-            var hasKey = this._myDictionary.TryGetValue(key, out var valueList);
 
-            if (hasKey)
+            if (this._myDictionary.TryGetValue(key, out var valueList))
             {
                 return this._myDictionary.Remove(key);
             }
+
             throw new ArgumentException($"{key} key doesn't exist");
         }
 
