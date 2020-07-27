@@ -6,28 +6,10 @@ using System.Linq;
 
 namespace Sorted_MultiMap
 {
-    class SortedMultiMap<K,V> : IEnumerable
+    class SortedMultiMap<K,V> : IEnumerable<KeyValuePair<K,V>>
     {
         private readonly Dictionary<K, List<V>> _myDictionary = new Dictionary<K, List<V>>();
 
-
-        public IEnumerator GetEnumerator()
-        {
-
-            foreach (KeyValuePair<K, List<V>> keyValue in this._myDictionary)
-            {
-                if (keyValue.Key != null)
-                {
-                    foreach (var v in keyValue.Value)
-                    {
-                        yield return new KeyValuePair<K,V>(keyValue.Key, v);
-                    }
-
-                }
-            }
-        }
-
-         
         public void Add(K key, V value)
         {
 
@@ -70,9 +52,10 @@ namespace Sorted_MultiMap
                     else
                     {
                         valueList.Sort();
+                        return true;
                     }
                 }
-                return true;
+                return false;
             }
 
             throw new ArgumentException($"{key} key doesn't exist");
@@ -103,6 +86,25 @@ namespace Sorted_MultiMap
         public bool HasKey(K key)
         {
             return this._myDictionary.ContainsKey(key);
+        }
+
+        public IEnumerator<KeyValuePair<K, V>> GetEnumerator()
+        {
+            foreach (KeyValuePair<K, List<V>> keyValue in this._myDictionary)
+            {
+                if (keyValue.Key != null)
+                {
+                    foreach (var v in keyValue.Value)
+                    {
+                        yield return new KeyValuePair<K, V>(keyValue.Key, v);
+                    }
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
     }
