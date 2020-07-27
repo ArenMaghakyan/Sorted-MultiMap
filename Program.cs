@@ -27,7 +27,9 @@ namespace Sorted_MultiMap
                 multi.Union(multi2);
 
                 foreach (KeyValuePair<string, int> item in multi)
+                {
                     Console.WriteLine("{0}-{1}", item.Key, item.Value);
+                }
             }
             catch (ArgumentException e)
             {
